@@ -19,7 +19,7 @@ var tempString = '';
 
 for (var i = 0; i < subs.length; i++) {
 	tempString += subs[i];
-	if (i % 500 === 499) {
+	if (i % 500 === 499 || i === subs.length - 1) {
 		concattedSubs.push(tempString);
 		tempString = '';
 	}
