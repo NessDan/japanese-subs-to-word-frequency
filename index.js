@@ -28,10 +28,24 @@ for (var i = 0; i < subs.length; i++) {
 subs = concattedSubs;
 
 async.forEach(subs, function(subpart, done) {
-	mecab.wakachi(subpart, function(err, result) {
+	var baseWords = [];
+
+	mecab.parse(subpart, function(err, result) {
 		if (err) throw err;
 
-		result = result.filter(function(el) {
+		for (var wordObj of result) {
+			var rawWord = wordObj[0];
+			var baseForm = wordObj[7];
+			var isVerb = wordObj[1] === "動詞";
+
+			if (isVerb) {
+				baseWords.push(baseForm);
+			} else {
+				baseWords.push(rawWord);
+			}
+		}
+
+		filteredWordList = baseWords.filter(function(el) {
 			if (ignoreList.indexOf(el) === -1) {
 				return true;
 			} else {
@@ -39,7 +53,7 @@ async.forEach(subs, function(subpart, done) {
 			}
 		});
 
-		mecabResults = mecabResults.concat(result);
+		mecabResults = mecabResults.concat(filteredWordList);
 		done();
 	});
 }, function(err) {
