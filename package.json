@@ -1,0 +1,39 @@
+{
+  "name": "japanese-subs-to-word-frequency",
+  "version": "1.0.0",
+  "description": "Takes .ass / .ssa subtitle files and creates a frequency list based on those words.",
+  "main": "index.js",
+  "dependencies": {
+    "async": "^1.5.1",
+    "jschardet": "^1.4.1",
+    "mecab-async": "^0.1.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "japanese",
+    "subtitles",
+    "subs",
+    "ass",
+    "ssa",
+    "frequency",
+    "list",
+    "common",
+    "words",
+    "vocab",
+    "study",
+    "anime",
+    "learning"
+  ],
+  "author": {
+    "name": "Daniel Kaspo",
+    "email": "danielkaspo@gmail.com"
+  },
+  "contributor": {
+    "name": "Ferris Nehme",
+    "email": "ferris.nehme@gmail.com"
+  },
+  "license": "ISC"
+}
