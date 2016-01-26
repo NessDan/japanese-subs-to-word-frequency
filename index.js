@@ -16,6 +16,12 @@ fs.writeFileSync('output.txt', '');
 subs = subs.split("\n");
 var concattedSubs = [];
 var tempString = '';
+var partsOfSpeech = {
+	verb: '動詞',
+	noun: '名詞',
+	adverb: '副詞',
+	conjunction: '接続詞'
+};
 
 for (var i = 0; i < subs.length; i++) {
 	tempString += subs[i];
@@ -28,7 +34,12 @@ for (var i = 0; i < subs.length; i++) {
 subs = concattedSubs;
 
 async.forEach(subs, function(subpart, done) {
-	var baseWords = [];
+	var wordCollections = {
+		all: [],
+		verb: [],
+		noun: [],
+		adverb: []
+	};
 
 	mecab.parse(subpart, function(err, result) {
 		if (err) throw err;
@@ -36,16 +47,25 @@ async.forEach(subs, function(subpart, done) {
 		for (var wordObj of result) {
 			var rawWord = wordObj[0];
 			var baseForm = wordObj[7];
-			var isVerb = wordObj[1] === "動詞";
+			var wordType = wordObj[1];
+			var wordToPush = rawWord; // Default, push raw word.
 
-			if (isVerb) {
-				baseWords.push(baseForm);
-			} else {
-				baseWords.push(rawWord);
+			switch (wordType) {
+				case partsOfSpeech.verb:
+					wordToPush = baseForm; // We care about base form for verbs.
+					wordCollections.verb.push(wordToPush);
+				case partsOfSpeech.noun:
+					wordCollections.noun.push(rawWord);
+				case partsOfSpeech.adverb:
+					wordCollections.adverb.push(rawWord);
+				default:
+					wordCollections.all.push(rawWord);
 			}
 		}
 
-		filteredWordList = baseWords.filter(function(el) {
+		// todo: output verbs, nouns, etc into own file.
+
+		filteredWordList = wordCollections.all.filter(function(el) {
 			if (ignoreList.indexOf(el) === -1) {
 				return true;
 			} else {
